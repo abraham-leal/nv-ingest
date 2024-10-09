@@ -16,7 +16,7 @@ opentelemetry-api
 opentelemetry-exporter-otlp
 opentelemetry-sdk
 pandas~=1.5.3
-pydantic==1.10.14
+pydantic
 pyinstrument
 pypdfium2
 python-docx

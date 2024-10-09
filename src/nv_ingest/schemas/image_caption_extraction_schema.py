@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 
 class ImageCaptionExtractionSchema(BaseModel):
@@ -11,6 +11,4 @@ class ImageCaptionExtractionSchema(BaseModel):
     caption_classifier_model_name: str = "deberta_large"
     endpoint_url: str = "triton:8001"
     raise_on_failure: bool = False
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")

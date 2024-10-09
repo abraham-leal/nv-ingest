@@ -7,9 +7,8 @@ import logging
 import typing
 
 import pymilvus
-from pydantic import BaseModel
+from pydantic import field_validator, ConfigDict, BaseModel
 from pydantic import Field
-from pydantic import validator
 
 logger = logging.getLogger(__name__)
 
@@ -88,17 +87,17 @@ class VdbTaskSinkSchema(BaseModel):
     retry_interval: float = 60.0
     raise_on_failure: bool = False
 
-    @validator("service", pre=True)
+    @field_validator("service", mode="before")
+    @classmethod
     def validate_service(cls, to_validate):  # pylint: disable=no-self-argument
         if not to_validate:
             raise ValueError("Service must be a service name or a serialized instance of VectorDBService")
         return to_validate
 
-    @validator("default_resource_name", pre=True)
+    @field_validator("default_resource_name", mode="before")
+    @classmethod
     def validate_resource_name(cls, to_validate):  # pylint: disable=no-self-argument
         if not to_validate:
             raise ValueError("Resource name must not be None or Empty.")
         return to_validate
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")

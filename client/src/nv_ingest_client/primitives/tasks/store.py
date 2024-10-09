@@ -10,8 +10,7 @@ import logging
 from typing import Dict
 from typing import Literal
 
-from pydantic import BaseModel
-from pydantic import root_validator
+from pydantic import model_validator, ConfigDict, BaseModel
 
 from .task_base import Task
 
@@ -23,16 +22,15 @@ _DEFAULT_STORE_METHOD = "minio"
 class StoreTaskSchema(BaseModel):
     store_method: str = None
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def set_default_store_method(cls, values):
         store_method = values.get("store_method")
 
         if store_method is None:
             values["store_method"] = _DEFAULT_STORE_METHOD
         return values
-
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
 
 
 class StoreTask(Task):
