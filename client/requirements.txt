@@ -1,5 +1,5 @@
 charset-normalizer
-pydantic
+pydantic==1.10.14
 python-magic
 redis~=5.0.1
 setuptools
@@ -10,5 +10,5 @@ python-pptx==0.6.23
 tqdm
 httpx
 requests
-weave==0.51.12
+weave
 wandb
