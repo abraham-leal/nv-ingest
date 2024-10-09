@@ -27,6 +27,11 @@ from nv_ingest_client.client import NvIngestClient
 from nv_ingest_client.message_clients.rest.rest_client import RestClient
 from pkg_resources import DistributionNotFound
 from pkg_resources import VersionConflict
+import weave
+import wandb
+
+wandb.login(key="fbfe099aa0a3ced368b8d2a1d3e0346454c34193", host="https://api.wandb.ai")
+weave.init("wandb-smle/weave-nims-blueprint-nv-ingest/")
 
 try:
     NV_INGEST_VERSION = pkg_resources.get_distribution("nv_ingest").version
@@ -169,6 +174,7 @@ Note: The 'extract_method' automatically selects the optimal method based on 'do
 )
 @click.option("--version", is_flag=True, help="Show version.")
 @click.pass_context
+@weave.op()
 def main(
     ctx,
     batch_size: int,
