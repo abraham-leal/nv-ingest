@@ -18,6 +18,7 @@ from typing import Optional
 import httpx
 import requests
 import re
+import weave
 
 from nv_ingest_client.message_clients import MessageClientBase
 
@@ -96,6 +97,7 @@ class RestClient(MessageClientBase):
     def max_retries(self, value: int) -> None:
         self._max_retries = value
 
+    @weave.op()
     def get_client(self) -> Any:
         """
         Returns a HTTP client instance, reconnecting if necessary.
@@ -124,6 +126,7 @@ class RestClient(MessageClientBase):
         except (httpx.HTTPError, AttributeError):
             return False
 
+    @weave.op()
     def generate_url(self, user_provided_url, user_provided_port) -> str:
         """Examines the user defined URL for http*://. If that
         pattern is detected the URL is used as provided by the user.
@@ -144,6 +147,7 @@ class RestClient(MessageClientBase):
             user_provided_url = f"{user_provided_url}:{user_provided_port}"
         return user_provided_url
 
+    @weave.op()
     def fetch_message(self, job_id: str, timeout: float = 10) -> Optional[str]:
         """
         Fetches a message from the specified queue with retries on failure.
@@ -210,6 +214,7 @@ class RestClient(MessageClientBase):
                 logger.error(f"Unexpected error during fetch from {url}: {e}")
                 raise ValueError(f"Unexpected error during fetch: {e}")
 
+    @weave.op()
     def submit_message(self, _: str, message: str) -> str:
         """
         Submits a JobSpec to a specified HTTP endpoint with retries on failure.
@@ -273,6 +278,7 @@ class RestClient(MessageClientBase):
                 logger.error(f"Unexpected error during submission of JobSpec to {url}: {e}")
                 raise ValueError(f"Unexpected error during JobSpec submission: {e}")
 
+    @weave.op()
     def perform_retry_backoff(self, existing_retries) -> int:
         """
         Attempts to perform a backoff retry delay. This function accepts the

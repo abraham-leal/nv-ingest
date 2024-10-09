@@ -174,7 +174,6 @@ Note: The 'extract_method' automatically selects the optimal method based on 'do
 )
 @click.option("--version", is_flag=True, help="Show version.")
 @click.pass_context
-@weave.op()
 def main(
     ctx,
     batch_size: int,
