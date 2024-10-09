@@ -31,7 +31,7 @@ import weave
 import wandb
 
 wandb.login(key="fbfe099aa0a3ced368b8d2a1d3e0346454c34193", host="https://api.wandb.ai")
-weave.init("wandb-smle/weave-nims-blueprint-nv-ingest/")
+weave.init("wandb-smle/weave-nims-blueprint-nv-ingest")
 
 try:
     NV_INGEST_VERSION = pkg_resources.get_distribution("nv_ingest").version
