@@ -13,8 +13,7 @@ from typing import Literal
 from typing import Optional
 from typing import get_args
 
-from pydantic import BaseModel
-from pydantic import root_validator
+from pydantic import field_validator, model_validator, ConfigDict, BaseModel
 from pydantic import validator
 
 from .task_base import Task
@@ -87,7 +86,8 @@ class ExtractTaskSchema(BaseModel):
     extract_charts: Optional[bool] = None  # Initially allow None to set a smart default
     text_depth: str = "document"
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def set_default_extract_method(cls, values):
         document_type = values.get("document_type", "").lower()  # Ensure case-insensitive comparison
         extract_method = values.get("extract_method")
@@ -103,7 +103,8 @@ class ExtractTaskSchema(BaseModel):
 
         return values
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def set_default_extract_charts(cls, values):
         # `extract_charts` is initially set to None for backward compatibility.
         # {extract_tables: true, extract_charts: None} or {extract_tables: true, extract-charts: true} enables both
@@ -115,6 +116,8 @@ class ExtractTaskSchema(BaseModel):
 
         return values
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("extract_method")
     def extract_method_must_be_valid(cls, v, values, **kwargs):
         document_type = values.get("document_type", "").lower()  # Ensure case-insensitive comparison
@@ -124,7 +127,8 @@ class ExtractTaskSchema(BaseModel):
 
         return v
 
-    @validator("document_type")
+    @field_validator("document_type")
+    @classmethod
     def document_type_must_be_supported(cls, v):
         if v.lower() not in _DEFAULT_EXTRACTOR_MAP:
             raise ValueError(
@@ -132,6 +136,8 @@ class ExtractTaskSchema(BaseModel):
             )
         return v.lower()
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("extract_tables_method")
     def extract_tables_method_must_be_valid(cls, v, values, **kwargs):
         document_type = values.get("document_type", "").lower()  # Ensure case-insensitive comparison
@@ -139,9 +145,7 @@ class ExtractTaskSchema(BaseModel):
         if v not in valid_methods:
             raise ValueError(f"extract_method must be one of {valid_methods}")
         return v
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class ExtractTask(Task):

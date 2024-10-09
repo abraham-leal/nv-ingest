@@ -9,7 +9,7 @@
 import logging
 from typing import Dict
 
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 from .task_base import Task
 
@@ -18,9 +18,7 @@ logger = logging.getLogger(__name__)
 
 class VdbUploadTaskSchema(BaseModel):
     filter_errors: bool = False
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class VdbUploadTask(Task):
