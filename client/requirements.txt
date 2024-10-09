@@ -1,5 +1,5 @@
 charset-normalizer
-pydantic
+pydantic==2.9.2
 python-magic
 redis~=5.0.1
 setuptools

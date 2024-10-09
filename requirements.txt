@@ -19,7 +19,7 @@ opentelemetry-instrumentation-fastapi
 opentelemetry-instrumentation-asgi
 opentelemetry-sdk
 pandas~=1.5.3
-pydantic
+pydantic==2.9.2
 pyinstrument
 pypdfium2
 python-docx
