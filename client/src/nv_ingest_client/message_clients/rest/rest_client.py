@@ -21,8 +21,8 @@ import re
 import weave
 import wandb
 
-wandb.login(key="fbfe099aa0a3ced368b8d2a1d3e0346454c34193", host="https://api.wandb.ai")
-weave.init("wandb-smle/weave-nims-blueprint-nv-ingest")
+#wandb.login(key="fbfe099aa0a3ced368b8d2a1d3e0346454c34193", host="https://api.wandb.ai")
+#weave.init("wandb-smle/weave-nims-blueprint-nv-ingest")
 
 from nv_ingest_client.message_clients import MessageClientBase
 
