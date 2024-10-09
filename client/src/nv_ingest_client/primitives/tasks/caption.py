@@ -9,7 +9,7 @@
 import logging
 from typing import Dict
 
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 from .task_base import Task
 
@@ -17,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class CaptionTaskSchema(BaseModel):
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class CaptionTask(Task):

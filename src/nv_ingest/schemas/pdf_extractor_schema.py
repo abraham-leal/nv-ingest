@@ -7,8 +7,7 @@ import logging
 from typing import Optional
 from typing import Tuple
 
-from pydantic import BaseModel
-from pydantic import root_validator
+from pydantic import model_validator, ConfigDict, BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +65,8 @@ class PDFiumConfigSchema(BaseModel):
 
     identify_nearby_objects: bool = False
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def validate_endpoints(cls, values):
         """
         Validates the gRPC and HTTP services for all endpoints.
@@ -104,9 +104,7 @@ class PDFiumConfigSchema(BaseModel):
             values[endpoint_name] = (grpc_service, http_service)
 
         return values
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class PDFExtractorSchema(BaseModel):
@@ -133,6 +131,4 @@ class PDFExtractorSchema(BaseModel):
     raise_on_failure: bool = False
 
     pdfium_config: Optional[PDFiumConfigSchema] = None
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")

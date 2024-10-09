@@ -11,8 +11,7 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from pydantic import root_validator
-from pydantic import validator
+from pydantic import field_validator, model_validator
 
 from nv_ingest.schemas.base_model_noext import BaseModelNoExt
 from nv_ingest.util.converters import datetools
@@ -187,7 +186,8 @@ class SourceMetadataSchema(BaseModelNoExt):
     partition_id: int = -1
     access_level: Union[AccessLevelEnum, int] = -1
 
-    @validator("date_created", "last_modified")
+    @field_validator("date_created", "last_modified")
+    @classmethod
     @classmethod
     def validate_fields(cls, field_value):
         datetools.validate_iso8601(field_value)
@@ -294,7 +294,8 @@ class MetadataSchema(BaseModelNoExt):
     debug_metadata: Optional[Dict[str, Any]] = None
     raise_on_failure: bool = False
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_metadata_type(cls, values):
         content_type = values.get("content_metadata", {}).get("type", None)
         if content_type != ContentTypeEnum.TEXT:

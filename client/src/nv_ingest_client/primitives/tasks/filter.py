@@ -11,8 +11,7 @@ from typing import Dict
 from typing import Literal
 from typing import Union
 
-from pydantic import BaseModel
-from pydantic import validator
+from pydantic import field_validator, ConfigDict, BaseModel
 
 from .task_base import Task
 
@@ -26,15 +25,14 @@ class FilterTaskSchema(BaseModel):
     min_aspect_ratio: Union[float, int] = 0.2
     filter: bool = False
 
-    @validator("content_type")
+    @field_validator("content_type")
+    @classmethod
     def content_type_must_be_valid(cls, v):
         valid_criteria = ["image"]
         if v not in valid_criteria:
             raise ValueError(f"content_type must be one of {valid_criteria}")
         return v
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class FilterTask(Task):

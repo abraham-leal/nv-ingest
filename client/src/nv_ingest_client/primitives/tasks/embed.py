@@ -9,7 +9,7 @@
 import logging
 from typing import Dict
 
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 from .task_base import Task
 
@@ -20,9 +20,7 @@ class EmbedTaskSchema(BaseModel):
     text: bool = True
     tables: bool = True
     filter_errors: bool = False
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class EmbedTask(Task):
